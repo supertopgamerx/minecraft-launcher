@@ -79,15 +79,22 @@
     transform: rotate(90deg);
 }
 
-.adImage {
+.adEmbedContainer {
     width: 100%;
-    max-width: 500px;
-    height: 250px;
-    object-fit: cover;
-    border-radius: 1rem;
     margin-bottom: 1.5rem;
+    border-radius: 1rem;
+    overflow: hidden;
     border: 2px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.adEmbedContainer .iframely-embed {
+    display: flex;
+    width: 100%;
+}
+
+.adEmbedContainer .iframely-responsive {
+    max-width: 100%;
 }
 
 .adTextContent {
@@ -173,10 +180,6 @@
     
     .adDescription {
         font-size: 1rem;
-    }
-    
-    .adImage {
-        height: 200px;
     }
     
     .adButton {
