@@ -67,6 +67,8 @@ const ads = [
     }
 ];
 
+let gameLink = "mc/1.12.2";
+
 function getRandomAd() {
     return ads[Math.floor(Math.random() * ads.length)];
 }
@@ -78,7 +80,7 @@ function createAdModal(ad) {
     
     const overlay = document.createElement('div');
     overlay.className = 'adOverlay';
-    overlay.onclick = closeAd;
+    overlay.onclick = playGame;
     
     const content = document.createElement('div');
     content.className = 'adContent';
@@ -87,7 +89,7 @@ function createAdModal(ad) {
     const closeBtn = document.createElement('button');
     closeBtn.className = 'adCloseBtn';
     closeBtn.innerHTML = '✕';
-    closeBtn.onclick = closeAd;
+    closeBtn.onclick = playGame;
     
     const embedContainer = document.createElement('div');
     embedContainer.className = 'adEmbedContainer';
@@ -113,11 +115,14 @@ function createAdModal(ad) {
     visitBtn.className = 'adButton adButtonPrimary';
     visitBtn.innerHTML = 'Visit Website';
     visitBtn.style.backgroundColor = ad.color;
+    visitBtn.onclick = (e) => {
+        setTimeout(playGame, 500);
+    };
     
     const skipBtn = document.createElement('button');
     skipBtn.className = 'adButton adButtonSecondary';
     skipBtn.innerHTML = 'Maybe Later';
-    skipBtn.onclick = closeAd;
+    skipBtn.onclick = playGame;
     
     buttonContainer.appendChild(visitBtn);
     buttonContainer.appendChild(skipBtn);
@@ -137,7 +142,6 @@ function createAdModal(ad) {
 }
 
 function showAd(adIndex = null) {
-    // Remove existing modal if present
     const existingModal = document.getElementById('adModal');
     if (existingModal) existingModal.remove();
     
@@ -145,10 +149,8 @@ function showAd(adIndex = null) {
     const modal = createAdModal(ad);
     document.body.appendChild(modal);
     
-    // Trigger animation
     setTimeout(() => {
         modal.classList.add('adShow');
-        // Load iframely embeds
         if (window.iframely) {
             window.iframely.load();
         }
@@ -156,19 +158,23 @@ function showAd(adIndex = null) {
 }
 
 function showAdBeforePlay() {
-    // Show random ad before playing
+    gameLink = document.getElementById('playbutton').getAttribute('data-link') || document.getElementById('playbutton').href || "mc/1.12.2";
     showAd();
-    
-    // Store that we showed an ad
-    localStorage.setItem('lastAdShown', new Date().getTime());
 }
 
-function closeAd() {
+function playGame() {
     const modal = document.getElementById('adModal');
     if (modal) {
         modal.classList.remove('adShow');
         setTimeout(() => {
             modal.remove();
+            window.location.href = gameLink;
         }, 300);
+    } else {
+        window.location.href = gameLink;
     }
+}
+
+function closeAd() {
+    playGame();
 }
